@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles';
 import { firebase } from '../../firebase/config'
+import axios from 'axios';
+import { REACT_APP_SERVER_URL } from '@env'
 
 export default function RegistrationScreen({ navigation }) {
   const [fullName, setFullName] = useState('')
@@ -14,36 +17,31 @@ export default function RegistrationScreen({ navigation }) {
       navigation.navigate('Login')
   }
 
-  console.log('navigationsignup', navigation)
-  const onRegisterPress = () => {
+  const onRegisterPress = async () => {
     if (password !== confirmPassword) {
       alert("Passwords don't match.")
       return
     }
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((response) => {
-        const uid = response.user.uid
-        const data = {
-          id: uid,
-          email,
-          fullName,
-        };
-        const usersRef = firebase.firestore().collection('users')
-        usersRef
-          .doc(uid)
-          .set(data)
-          .then(() => {
-              navigation.navigate('Home', {user: data})
-          })
-          .catch((error) => {
-              alert(error)
-          });
+    try  {
+      const user = {
+        fullName,
+        email,
+        password,
+      }
+
+      const { data } = await axios({
+        method: 'POST',
+        baseURL: REACT_APP_SERVER_URL,
+        url: `/user/signup`,
+        data: user,
       })
-      .catch((error) => {
-        alert(error)
-      });
+
+      await AsyncStorage.setItem('token', data.token)
+      navigation.navigate('Home', { user: data })
+    } catch (err) {
+      console.log('err', err)
+    }
+   
   }
 
   return (
