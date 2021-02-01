@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 1,
   },
   input: {
     height: 48,
@@ -15,5 +16,49 @@ export default StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     paddingLeft: 16
-  }
+  },
+  profilePic: {
+    flex: 1,
+    height: 280,
+    width: 210,
+    alignSelf: "center",
+    marginTop: 30
+  },
+  addPicButton: {
+    backgroundColor: 'grey',
+    borderRadius: 50,
+    width: 25,
+    height: 25,
+  },
+  addPicButtonIcon: {
+    position: "absolute",
+    color: 'white',
+    width: 25,
+    height: 25,
+    top: 0,
+    left: 0
+  },
+  input: {
+    height: 48,
+    borderRadius: 5,
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    paddingLeft: 16
+  },
+  propertyInput: {
+    width: '70%',
+    height: 48,
+    borderRadius: 5,
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 0,
+    marginRight: 60,
+    paddingLeft: 16
+  },
 })

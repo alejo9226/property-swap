@@ -1,45 +1,40 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles';
-import { firebase } from '../../firebase/config'
+import axios from 'axios';
+import { REACT_APP_SERVER_URL } from '@env'
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, setIsLoggedIn }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const onFooterLinkPress = () => {
       navigation.navigate('Signup')
     }
-    console.log('navigationlogin', navigation)
-    const onLoginPress = () => {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((response) => {
-          console.log('response', response)
-          const uid = response.user.uid
-          const usersRef = firebase.firestore().collection('users')
-          console.log('usersRef', usersRef)
-          console.log('navigation', navigation)
-          navigation.navigate('Home')
-          /* usersRef
-            .doc(uid)
-            .get()
-            .then(firestoreDocument => {
-              if (!firestoreDocument.exists) {
-                  alert("User does not exist anymore.")
-                  return;
-              }
-              const user = firestoreDocument.data()
-            })
-            .catch(error => {
-              alert(error)
-            }); */
+    //console.log('props', props)
+    const onLoginPress = async () => {
+      if (!email || !password) alert('Fill all fields')
+      try  {
+        const loggingUser = {
+          email,
+          password,
+        }
+  
+        const { data } = await axios({
+          method: 'POST',
+          baseURL: REACT_APP_SERVER_URL,
+          url: `/user/login`,
+          data: loggingUser,
         })
-        .catch(error => {
-            alert(error)
-        })
+
+        console.log('token', data.token)
+        await AsyncStorage.setItem('token', data.token)
+        setIsLoggedIn(true)
+      } catch (error) {
+        alert(`${error}`)
+      }
     }
 
     return (
@@ -78,7 +73,7 @@ export default function LoginScreen({ navigation }) {
           <View style={styles.footerView}>
             <Text 
               style={styles.footerText}
-            >Don't have an account? 
+            >Don't have an account?{` `}
               <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text>
             </Text>
           </View>
