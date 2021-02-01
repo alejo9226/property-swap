@@ -3,25 +3,49 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer, StackActions } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Signup, Login, Home } from './src/screens';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Signup, Login, Tabs } from './src/screens';
+import AddProperty from './src/screens/home/hometabs/misc/AddProperty';
 
 const Stack = createStackNavigator()
 
 export default function App() {
 
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    async function checkForToken () {
+      const token = await AsyncStorage.getItem('token')
+      if (token) setIsLoggedIn(true)
+      
+    }
+    checkForToken()
+  }, [])
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* user ? (
-          <Stack.Screen name="Home">
-            {props => <Home {...props} extraData={user} />}
-          </Stack.Screen>  */}
-          <Stack.Screen name="Signup" component={Signup}/>
-          <Stack.Screen name="Login"component={Login}/>
-          <Stack.Screen name="Home" component={Home}/>
+        {isLoggedIn ? (
+          <>
+            <Stack.Screen name="Tabs">
+              {props => <Tabs {...props} setIsLoggedIn={setIsLoggedIn} />}
+            </Stack.Screen>
+            <Stack.Screen name="AddProperty">
+              {props => <AddProperty {...props} setIsLoggedIn={setIsLoggedIn} />}
+            </Stack.Screen>
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login">
+              {props => <Login {...props} setIsLoggedIn={setIsLoggedIn}/>}
+            </Stack.Screen>
+            <Stack.Screen name="Signup">
+              {props => <Signup {...props} setIsLoggedIn={setIsLoggedIn}/>}
+            </Stack.Screen>
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

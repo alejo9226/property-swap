@@ -7,7 +7,7 @@ import { firebase } from '../../firebase/config'
 import axios from 'axios';
 import { REACT_APP_SERVER_URL } from '@env'
 
-export default function RegistrationScreen({ navigation }) {
+export default function RegistrationScreen({ navigation, setIsLoggedIn }) {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,11 +37,10 @@ export default function RegistrationScreen({ navigation }) {
       })
 
       await AsyncStorage.setItem('token', data.token)
-      navigation.navigate('Home', { user: data })
-    } catch (err) {
-      console.log('err', err)
+      setIsLoggedIn(true)
+    } catch ({ response: { data } }) {
+      alert(`${data.message}`)
     }
-   
   }
 
   return (
@@ -93,7 +92,8 @@ export default function RegistrationScreen({ navigation }) {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => onRegisterPress()}>
+          onPress={() => onRegisterPress()}
+        >
           <Text style={styles.buttonTitle}>Create account</Text>
         </TouchableOpacity>
         <View style={styles.footerView}>
