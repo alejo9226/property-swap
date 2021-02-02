@@ -32,7 +32,6 @@ export default StyleSheet.create({
   },
   addPicButtonIcon: {
     position: "absolute",
-    color: 'white',
     width: 25,
     height: 25,
     top: 0,

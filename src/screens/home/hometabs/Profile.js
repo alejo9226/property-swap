@@ -60,12 +60,35 @@ export default function Profile({ navigation, setIsLoggedIn }) {
       const data = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 3]
+        aspect: [4, 3],
+        allowsMultipleSelection: true,
       })
-      console.log(data)
+      console.log('data', data)
+      //const reader = new FileReader()
+      
+      
       setProfilePic(data)
-    } catch (err) {
+      
+      const imageData = new FormData()
+      imageData.append('uri', data)
 
+      const token = await AsyncStorage.getItem('token')
+      const response = await axios({  
+        baseURL: REACT_APP_SERVER_URL,
+        method: 'POST',
+        url: '/upload',
+        data: imageData,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+
+      console.log('response', response)
+      alert('Image successfully saved')
+
+    } catch (err) {
+      console.log('err', err)
     }
   }
   const nameHandleChange = (text) => {

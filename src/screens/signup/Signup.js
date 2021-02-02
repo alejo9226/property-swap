@@ -3,7 +3,6 @@ import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles';
-import { firebase } from '../../firebase/config'
 import axios from 'axios';
 import { REACT_APP_SERVER_URL } from '@env'
 
