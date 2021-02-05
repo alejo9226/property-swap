@@ -12,23 +12,28 @@ export default function Home({ setIsLoggedIn }) {
   useEffect(() => {
     async function getProperties () {
       try {
+        const token = await AsyncStorage.getItem('token')
         const properties = await axios({
           baseURL: REACT_APP_SERVER_URL,
           method: 'GET',
-          url: `/properties`
+          url: `/property`,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
         })
         setProperties(properties.data)
       } catch (err) {
-        alert(`${error}`)
+        alert(`${err}`)
       }
     }
-  })
+    getProperties()
+  }, [])
 
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem('token')
     setIsLoggedIn(false)
   }
-
+  console.log('properties', properties)
   return (
     <View>
       <Text>Home Screen</Text>
@@ -39,7 +44,7 @@ export default function Home({ setIsLoggedIn }) {
       </TouchableOpacity>
       {!!properties && properties.length > 0 ? (
         <FlatList 
-        data={posts}
+        data={properties}
         renderItem={({ item }) => (
           <View>
             <Text>{item.title}</Text>

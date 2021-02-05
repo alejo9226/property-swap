@@ -5,17 +5,10 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     borderWidth: 1,
+    marginBottom: 15,
   },
-  input: {
-    height: 48,
-    borderRadius: 5,
-    overflow: 'hidden',
-    backgroundColor: 'white',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
-    paddingLeft: 16
+  textLabel: {
+    marginHorizontal: 30,
   },
   profilePic: {
     flex: 1,
