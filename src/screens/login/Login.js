@@ -13,7 +13,7 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
     const onFooterLinkPress = () => {
       navigation.navigate('Signup')
     }
-    //console.log('props', props)
+
     const onLoginPress = async () => {
       if (!email || !password) alert('Fill all fields')
       try  {
@@ -29,7 +29,6 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
           data: loggingUser,
         })
 
-        console.log('token', data.token)
         await AsyncStorage.setItem('token', data.token)
         setIsLoggedIn(true)
       } catch (error) {

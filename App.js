@@ -32,9 +32,6 @@ export default function App() {
             <Stack.Screen name="Tabs">
               {props => <Tabs {...props} setIsLoggedIn={setIsLoggedIn} />}
             </Stack.Screen>
-            <Stack.Screen name="AddProperty">
-              {props => <AddProperty {...props} setIsLoggedIn={setIsLoggedIn} />}
-            </Stack.Screen>
           </>
         ) : (
           <>

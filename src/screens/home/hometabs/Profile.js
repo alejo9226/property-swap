@@ -11,14 +11,15 @@ import * as ImagePicker from 'expo-image-picker'
 
 export default function Profile({ navigation, setIsLoggedIn }) {
   const formState = {
+    profilePic: '',
     fullName: '',
     email: '',
     password: '',
-    properties: '',
+    property: '',
   }
   const [currentUser, setCurrentUser] = useState(null)
   const [cameraRollPermission, setCameraRollPermission] = useState('denied')
-  const [profilePic, setProfilePic] = useState(null)
+  const [profilePicEd, setProfilePicEd] = useState(null)
   const [form, setForm] = useState(formState)
   
 
@@ -37,18 +38,19 @@ export default function Profile({ navigation, setIsLoggedIn }) {
         setCurrentUser(data.data)
         setForm({
           ...form, 
+          profilePic: data.data.profilePic ? data.data.profilePic : '',
           fullName: data.data.fullName,
           email: data.data.email,
           password: data.data.password,
-          properties: data.data.property ? `${data.data.property}` : 'You don\'t have properties'
+          property: data.data.property ? `Yes` : 'You don\'t have properties'
         })
       } catch (err) {
-        console.log(err)
+        alert('We\'re having trouble to retrieve your info')
       }
     }
 
     getProfileInfo()
-  }, [])
+  }, [profilePicEd])
 
   useEffect(() => {
     Permissions.askAsync(Permissions.MEDIA_LIBRARY)
@@ -60,12 +62,33 @@ export default function Profile({ navigation, setIsLoggedIn }) {
       const data = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 3]
+        aspect: [4, 3],
+        allowsMultipleSelection: true,
       })
-      console.log(data)
-      setProfilePic(data)
-    } catch (err) {
+  
+      const imageData = new FormData()
+      imageData.append('name', 'Image Upload');
+      imageData.append('file_attachment', {
+        ...data,
+        name: 'image.jpg'
+      })
 
+      const token = await AsyncStorage.getItem('token')
+      const response = await axios({  
+        baseURL: REACT_APP_SERVER_URL,
+        method: 'PUT',
+        url: '/upload/user',
+        data: imageData,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+      setProfilePicEd(data)
+      alert('Image successfully saved')
+
+    } catch (err) {
+      alert('Try saving your image later')
     }
   }
   const nameHandleChange = (text) => {
@@ -87,7 +110,6 @@ export default function Profile({ navigation, setIsLoggedIn }) {
     navigation.navigate('AddProperty')
   }
 
-  console.log('currentUser desde profile', currentUser)
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -96,7 +118,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
         <View style={styles.container}>
           <ImageBackground
             style={styles.profilePic}
-            source={!!profilePic ? { uri: profilePic.uri } : require('../../../../assets/icon.png') }
+            source={!!form.profilePic ? { uri: form.profilePic } : require('../../../../assets/icon.png') }
           >
           {cameraRollPermission === 'granted' && (
             <TouchableOpacity
@@ -112,25 +134,33 @@ export default function Profile({ navigation, setIsLoggedIn }) {
           </ImageBackground>
         </View>
         <View>
-          <Text>Name</Text>
+          <Text
+            style={styles.textLabel}
+          >Name</Text>
           <TextInput 
             onChangeText={nameHandleChange}
             style={styles.input}
             value={form.fullName}
           />
-          <Text>Email</Text>
+          <Text
+            style={styles.textLabel}
+          >Email</Text>
           <TextInput 
             onChangeText={emailHandleChange}
             style={styles.input}
             value={form.email}
           />
-          <Text>Password</Text>
+          <Text
+            style={styles.textLabel}
+          >Password</Text>
           <TextInput 
             onChangeText={passwordHandleChange}
             style={styles.input}
             value={form.password}
           />
-          <Text>Properties</Text>
+          <Text
+            style={styles.textLabel}
+          >Properties</Text>
           <View
             style={{
               borderWidth: 1,
@@ -142,9 +172,10 @@ export default function Profile({ navigation, setIsLoggedIn }) {
             <TextInput 
               editable={false}
               style={styles.propertyInput}
-              value={form.properties}
+              value={form.property}
             />
-            <TouchableOpacity
+            {!form.property ? (
+              <TouchableOpacity
               onPress={addProperty}
               style={{
                 backgroundColor: 'red',
@@ -158,10 +189,13 @@ export default function Profile({ navigation, setIsLoggedIn }) {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: "bold"
+                  fontWeight: "bold",
+                  flex: 1,
                 }}
               >Add</Text>
             </TouchableOpacity>
+            ) : <></>}
+            
           </View>
         </View>
        

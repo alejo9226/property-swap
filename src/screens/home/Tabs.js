@@ -7,6 +7,7 @@ import Profile from './hometabs/Profile'
 import axios from 'axios'
 import Settings from './hometabs/Settings'
 import { REACT_APP_SERVER_URL } from '@env'
+import ProfileHome from './hometabs/misc/ProfileHome';
 
 const Tab = createBottomTabNavigator()
 
@@ -40,7 +41,7 @@ export default function Tabs ({ setIsLoggedIn }) {
         {props => <Home {...props} setIsLoggedIn={setIsLoggedIn} />}
       </Tab.Screen>
       <Tab.Screen 
-        name="Profile"
+        name="ProfileHome"
         options={{
           tabBarIcon: ({ focused }) => (
             <Image 
@@ -55,7 +56,7 @@ export default function Tabs ({ setIsLoggedIn }) {
           )
         }}
       >
-        {props => <Profile {...props} setIsLoggedIn={setIsLoggedIn} />}
+        {props => <ProfileHome {...props} setIsLoggedIn={setIsLoggedIn} />}
       </Tab.Screen>
     </Tab.Navigator>
   )
