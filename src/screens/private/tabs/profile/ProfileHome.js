@@ -5,8 +5,7 @@ import { NavigationContainer, StackActions } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddProperty from './AddProperty';
-import Home from '../Home';
-import Profile from '../Profile';
+import Profile from './Profile';
 
 const Stack = createStackNavigator()
 
@@ -21,7 +20,11 @@ export default function ProfileHome () {
     <NavigationContainer
       independent={true}
     >
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
         <Stack.Screen name="Profile">
           {props => <Profile {...props} />}
         </Stack.Screen>

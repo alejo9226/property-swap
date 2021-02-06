@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Text, View, Image, Button, ImageBackground } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import styles from '../styles';
+import styles from '../home/styles';
 import { REACT_APP_SERVER_URL } from '@env'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
@@ -42,7 +42,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
           fullName: data.data.fullName,
           email: data.data.email,
           password: data.data.password,
-          property: data.data.property ? `Yes` : 'You don\'t have properties'
+          property: !data.data.property ? '' : data.data.property,
         })
       } catch (err) {
         alert('We\'re having trouble to retrieve your info')
@@ -109,7 +109,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
   const addProperty = () => {
     navigation.navigate('AddProperty')
   }
-
+  console.log('form', form)
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -118,7 +118,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
         <View style={styles.container}>
           <ImageBackground
             style={styles.profilePic}
-            source={!!form.profilePic ? { uri: form.profilePic } : require('../../../../assets/icon.png') }
+            source={!!form.profilePic ? { uri: form.profilePic } : require('../../../../../assets/icon.png') }
           >
           {cameraRollPermission === 'granted' && (
             <TouchableOpacity
@@ -126,7 +126,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
               onPress={() => pickImage()}
             >
               <Image
-                source={require('../../../../assets/add-icon.png')}
+                source={require('../../../../../assets/add-icon.png')}
                 style={styles.addPicButtonIcon}
               />
             </TouchableOpacity>
@@ -172,7 +172,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
             <TextInput 
               editable={false}
               style={styles.propertyInput}
-              value={form.property}
+              value={!form.property ? 'You don\'t have properties' : form.property}
             />
             {!form.property ? (
               <TouchableOpacity

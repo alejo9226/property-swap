@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles';
 import axios from 'axios';
@@ -28,7 +27,7 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
           url: `/user/login`,
           data: loggingUser,
         })
-
+        console.log('data', data)
         await AsyncStorage.setItem('token', data.token)
         setIsLoggedIn(true)
       } catch (error) {
@@ -37,13 +36,12 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
     }
 
     return (
-      <View style={styles.container}>
-        <KeyboardAwareScrollView
-          style={{ flex: 1, width: '100%' }}
-          keyboardShouldPersistTaps="always">
+        <View
+          style={styles.container}
+        >
           <Image
             style={styles.logo}
-            source={require('../../../assets/icon.png')}
+            source={require('../../../../assets/icon.png')}
           />
           <TextInput
             style={styles.input}
@@ -76,7 +74,6 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
               <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text>
             </Text>
           </View>
-        </KeyboardAwareScrollView>
-      </View>
+        </View>
     )
 }
