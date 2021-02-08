@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../../../constants/theme';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    borderWidth: 1,
     marginBottom: 15,
+    backgroundColor: COLORS.background
   },
   textLabel: {
     marginHorizontal: 30,

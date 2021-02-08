@@ -4,7 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { Image, SafeAreaView, Text, View } from 'react-native'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import { REACT_APP_SERVER_URL } from '@env'
-import { COLORS } from '../../../../constants/theme'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import ViewProperty from './ViewProperty'
+import GetProperties from './GetProperties'
+import PostSwap from './PostSwap'
+
+const Stack = createStackNavigator()
 
 export default function Home({ setIsLoggedIn }) {
 
@@ -38,68 +44,24 @@ export default function Home({ setIsLoggedIn }) {
   }
   console.log('total properties', properties)
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        paddingVertical: 50,
-        backgroundColor: COLORS.background
-      }}
+    <NavigationContainer
+      independent={true}
     >
-      <TouchableOpacity
-        onPress={() => onLogoutPress()}
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
       >
-        <Text>Logout</Text>
-      </TouchableOpacity>
-      {!!properties && properties.length > 0 ? (
-        <FlatList 
-          style={{
-            padding: 10
-          }}
-          data={properties}
-          renderItem={({ item }) => (
-          <TouchableOpacity
-            style={{
-              width: '90%',
-              alignSelf: 'center'
-            }}
-          >
-            <View>
-              <Image 
-                style={{
-                  width: '100%',
-                  height: 200,
-                  borderTopLeftRadius: 15,
-                  borderTopRightRadius: 15,
-                }}
-                source={{ uri: item.pictures && item.pictures.length > 0 ? item.pictures[1] : '' }}
-              />
-            </View>
-            <View
-              style={{
-                backgroundColor: 'white',
-                borderBottomLeftRadius: 15,
-                borderBottomRightRadius: 15,
-                padding: 5,
-              }}
-            >
-              <View>
-                <Text>Apartamento</Text>
-              </View>
-              <View>
-                <Text>Ciudad</Text>
-              </View>
-              <View>
-                <Text>{item.address}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => `${item._id}`}
-      />
-      ) : <Text>No properties to show.</Text>}
-      
-
-     
-    </SafeAreaView>
-  )
+        <Stack.Screen name="GetProperties">
+          {props => <GetProperties {...props} setIsLoggedIn={setIsLoggedIn}/>}
+        </Stack.Screen>
+        <Stack.Screen name="ViewProperty">
+          {props => <ViewProperty {...props} setIsLoggedIn={setIsLoggedIn}/>}
+        </Stack.Screen>
+        <Stack.Screen name="PostSwap">
+          {props => <PostSwap {...props} setIsLoggedIn={setIsLoggedIn}/>}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }

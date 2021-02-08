@@ -4,6 +4,9 @@ import { createBottomTabNavigator, BottomTapBar } from '@react-navigation/bottom
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Home from './home/Home';
 import ProfileHome from './profile/ProfileHome';
+import { COLORS } from '../../../constants/theme'
+import RetrieveSwaps from './swaps/RetrieveSwaps';
+
 
 const Tab = createBottomTabNavigator()
 
@@ -29,7 +32,7 @@ export default function Tabs ({ setIsLoggedIn }) {
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? "#FC6D3F" : "#CDCDD2"
+                tintColor: focused ? COLORS.primary : "#CDCDD2"
               }}
             />
           )
@@ -47,13 +50,31 @@ export default function Tabs ({ setIsLoggedIn }) {
             style={{
               width: 25,
               height: 25,
-              tintColor: focused ? "#FC6D3F" : "#CDCDD2"
+              tintColor: focused ? COLORS.primary : "#CDCDD2"
             }}
             />
           )
         }}
       >
         {props => <ProfileHome {...props} setIsLoggedIn={setIsLoggedIn} />}
+      </Tab.Screen>
+      <Tab.Screen 
+        name="RetrieveSwaps"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image 
+            source={require('../../../../assets/shuffle.png')} 
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+              tintColor: focused ? COLORS.primary : "#CDCDD2"
+            }}
+            />
+          )
+        }}
+      >
+        {props => <RetrieveSwaps {...props} setIsLoggedIn={setIsLoggedIn} />}
       </Tab.Screen>
     </Tab.Navigator>
   )
