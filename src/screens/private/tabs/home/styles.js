@@ -1,11 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { COLORS } from '../../../../constants/theme'
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    borderWidth: 1,
     marginBottom: 15,
+    backgroundColor: COLORS.background,
   },
   textLabel: {
     marginHorizontal: 30,
@@ -15,6 +16,7 @@ export default StyleSheet.create({
     height: 280,
     width: 210,
     alignSelf: "center",
+    borderRadius: 50,
     marginTop: 30
   },
   addPicButton: {

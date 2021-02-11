@@ -1,35 +1,31 @@
 import { StyleSheet } from 'react-native';
+import { COLORS, LOGO } from '../../../constants/theme'
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: '25%',
+    backgroundColor: COLORS.background
   },
   title: {
 
   },
-  logo: {
-    flex: 1,
-    height: 120,
-    width: 90,
-    alignSelf: "center",
-    margin: 30
-  },
+  logo: LOGO,
   input: {
     height: 48,
     borderRadius: 5,
     overflow: 'hidden',
     backgroundColor: 'white',
+    width: '85%',
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
     paddingLeft: 16
   },
   button: {
-    backgroundColor: '#788eec',
-    marginLeft: 30,
-    marginRight: 30,
+    backgroundColor: COLORS.primary,
+    width: '85%',
     marginTop: 20,
     height: 48,
     borderRadius: 5,
@@ -42,16 +38,15 @@ export default StyleSheet.create({
     fontWeight: "bold"
   },
   footerView: {
-    flex: 1,
     alignItems: "center",
     marginTop: 20
   },
   footerText: {
     fontSize: 16,
-    color: '#2e2e2d'
+    color: COLORS.primary
   },
   footerLink: {
-    color: "#788eec",
+    color: COLORS.primary,
     fontWeight: "bold",
     fontSize: 16
   }

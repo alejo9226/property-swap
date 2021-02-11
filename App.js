@@ -1,11 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer, StackActions } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Signup, Login, Tabs } from './src/screens';
-import AddProperty from './src/screens/home/hometabs/misc/AddProperty';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Signup, Login } from './src/screens/public'
+import Tabs from './src/screens/private/tabs/Tabs'
 
 const Stack = createStackNavigator()
 
@@ -19,14 +17,17 @@ export default function App() {
     async function checkForToken () {
       const token = await AsyncStorage.getItem('token')
       if (token) setIsLoggedIn(true)
-      
     }
     checkForToken()
   }, [])
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
         {isLoggedIn ? (
           <>
             <Stack.Screen name="Tabs">

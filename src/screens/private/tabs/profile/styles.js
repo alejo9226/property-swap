@@ -1,10 +1,23 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "../../../../constants/theme";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     borderWidth: 1,
-    marginBottom: 15,
+    paddingTop: 50,
+    paddingBottom: 50,
+    backgroundColor: COLORS.background
+  },
+  textarea: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    height: 68,
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 30,
+    marginRight: 30,
+    padding: 10
   },
   input: {
     height: 48,
@@ -25,12 +38,16 @@ export default StyleSheet.create({
    backgroundColor: 'white', 
    height: '50%',
    flexDirection: 'row',
+   
    paddingVertical: 5,
   },
   views: {
-    borderWidth: 1,
-    borderColor: 'green',
     alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 50,
+    backgroundColor: 'grey',
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     marginHorizontal: 5,
   },
@@ -40,10 +57,11 @@ export default StyleSheet.create({
     flex: 1,
   },
   button: {
-    backgroundColor: '#788eec',
+    backgroundColor: COLORS.primary,
     marginLeft: 30,
     marginRight: 30,
     marginTop: 20,
+    marginBottom: 70,
     height: 48,
     borderRadius: 5,
     alignItems: "center",
