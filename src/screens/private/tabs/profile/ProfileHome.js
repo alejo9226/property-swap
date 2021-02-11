@@ -9,11 +9,11 @@ import Profile from './Profile';
 
 const Stack = createStackNavigator()
 
-export default function ProfileHome () {
+export default function ProfileHome ({ properties, setProperties, setIsLoggedIn }) {
 
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [addProperty, setAddProperty] = useState(false)
 
 
   return (
@@ -26,10 +26,10 @@ export default function ProfileHome () {
         }}
       >
         <Stack.Screen name="Profile">
-          {props => <Profile {...props} />}
+          {props => <Profile {...props} addProperty={addProperty} properties={properties} setProperties={setProperties} setIsLoggedIn={setIsLoggedIn}/>}
         </Stack.Screen>
         <Stack.Screen name="AddProperty">
-          {props => <AddProperty {...props} setIsLoggedIn={setIsLoggedIn} />}
+          {props => <AddProperty {...props} addProperty={addProperty} setAddProperty={setAddProperty}/>}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

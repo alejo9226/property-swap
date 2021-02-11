@@ -2,35 +2,63 @@ import { StyleSheet } from 'react-native'
 import { COLORS } from '../../../../constants/theme'
 
 export default StyleSheet.create({
-  container: {
+  containerOuter: {
     flex: 1,
     alignItems: 'center',
     marginBottom: 15,
+    paddingTop: 10,
     backgroundColor: COLORS.background,
+    
+  },
+  containerInner: {
+    flex: 1,
+    alignItems: 'center',
+    marginBottom: 15,
+    paddingTop: 20,
+    backgroundColor: COLORS.background,
+  },
+  imageContainer: {
+    borderRadius: 50,
+  },
+  profilePic: {
+    height: 280,
+    width: 280,
+    borderRadius: 40,
+    alignSelf: "center",
+    marginTop: 30,
+  },
+  addPicView: {
+    backgroundColor: 'white',
+    opacity: 0.8,
+    borderRadius: 50,
+    padding: 10,
+    width: 30,
+    height: 30,
+    zIndex: 1000,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: '85%',
+    left: '55%'
+  },
+  addPicButton: {
+    
+    
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 35,
+    height: 35,
+  },
+  addPicButtonIcon: {
+    width: 18,
+    height: 18,
+  },
+  addPropertyicButtonIcon: {
+    width: 16,
+    height: 16,
   },
   textLabel: {
     marginHorizontal: 30,
-  },
-  profilePic: {
-    flex: 1,
-    height: 280,
-    width: 210,
-    alignSelf: "center",
-    borderRadius: 50,
-    marginTop: 30
-  },
-  addPicButton: {
-    backgroundColor: 'grey',
-    borderRadius: 50,
-    width: 25,
-    height: 25,
-  },
-  addPicButtonIcon: {
-    position: "absolute",
-    width: 25,
-    height: 25,
-    top: 0,
-    left: 0
   },
   input: {
     height: 48,

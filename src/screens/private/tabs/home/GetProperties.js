@@ -6,9 +6,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import { REACT_APP_SERVER_URL } from '@env'
 import { COLORS } from '../../../../constants/theme'
 
-export default function GetProperties ({ setIsLoggedIn, navigation }) {
-
-  const [properties, setProperties] = useState([])
+export default function GetProperties ({ setIsLoggedIn, navigation, properties, setProperties }) {
 
   useEffect(() => {
     async function getProperties () {
@@ -46,14 +44,11 @@ export default function GetProperties ({ setIsLoggedIn, navigation }) {
       style={{
         flex: 1,
         paddingVertical: 50,
-        backgroundColor: COLORS.background
+        backgroundColor: COLORS.background,
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
     >
-      <TouchableOpacity
-        onPress={() => onLogoutPress()}
-      >
-        <Text>Logout</Text>
-      </TouchableOpacity>
       {!!properties && properties.length > 0 ? (
         <FlatList 
           style={{
@@ -62,10 +57,11 @@ export default function GetProperties ({ setIsLoggedIn, navigation }) {
           data={properties}
           renderItem={({ item }) => (
           <TouchableOpacity
-              onPress={viewProperty.bind(this, item._id)}
+            onPress={viewProperty.bind(this, item._id)}
             style={{
-              width: '90%',
-              alignSelf: 'center'
+              width: '99%',
+              alignSelf: 'center',
+              marginBottom: 10
             }}
           >
             <View>
@@ -76,7 +72,7 @@ export default function GetProperties ({ setIsLoggedIn, navigation }) {
                   borderTopLeftRadius: 15,
                   borderTopRightRadius: 15,
                 }}
-                source={{ uri: item.pictures && item.pictures.length > 0 ? item.pictures[1] : '' }}
+                source={{ uri: item.pictures && item.pictures.length > 0 ? item.pictures[0] : '' }}
               />
             </View>
             <View
@@ -84,17 +80,141 @@ export default function GetProperties ({ setIsLoggedIn, navigation }) {
                 backgroundColor: 'white',
                 borderBottomLeftRadius: 15,
                 borderBottomRightRadius: 15,
-                padding: 5,
+                padding: 10,
               }}
             >
               <View>
-                <Text>Apartamento</Text>
+                <Text
+                  style={{
+                    color: COLORS.primary,
+                    fontWeight: '600',
+                    fontSize: 16,
+                  }}
+                >{item.estateType}</Text>
               </View>
               <View>
-                <Text>Ciudad</Text>
+                <Text
+                  style={{
+                    color: 'grey',
+                    marginVertical: 5,
+                    fontSize: 15
+                  }}
+                >{`${item.address}, ${item.city}, ${item.country}`}</Text>
               </View>
               <View>
-                <Text>{item.address}</Text>
+                <Text>{item.user ? item.user.fullName : ''}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '80%',
+                  marginTop: 10
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 30,
+                      width: 30,
+                      borderRadius: 50,
+                      backgroundColor: '#f3f3f4',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Image 
+                      source={require('../../../../assets/images/bed.png')} 
+                      resizeMode="contain"
+                      style={{
+                        width: 15,
+                        height: 15,
+                        tintColor: COLORS.primary
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 10,
+
+                    }}
+                  >{item.rooms}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 30,
+                      width: 30,
+                      borderRadius: 50,
+                      backgroundColor: '#f3f3f4',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Image 
+                      source={require('../../../../assets/images/bathtub.png')} 
+                      resizeMode="contain"
+                      style={{
+                        width: 15,
+                        height: 15,
+                        tintColor: COLORS.primary
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 10
+                    }}
+                  >{item.toilets}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 30,
+                      width: 30,
+                      borderRadius: 50,
+                      backgroundColor: '#f3f3f4',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+
+                    }}
+                  >
+                    <Image 
+                      source={require('../../../../assets/images/assembly-area.png')} 
+                      resizeMode="contain"
+                      style={{
+                        width: 15,
+                        height: 15,
+                        tintColor: COLORS.primary
+                      }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 10
+                    }}
+                  >{`${item.area}m²`}</Text>
+                </View>
+                
               </View>
             </View>
           </TouchableOpacity>

@@ -27,7 +27,7 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
           url: `/user/login`,
           data: loggingUser,
         })
-        console.log('data', data)
+        console.log('datica', data)
         await AsyncStorage.setItem('token', data.token)
         setIsLoggedIn(true)
       } catch (error) {
@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
         >
           <Image
             style={styles.logo}
-            source={require('../../../../assets/icon.png')}
+            source={require('../../../assets/images/PropertySwapLogo.png')}
           />
           <TextInput
             style={styles.input}

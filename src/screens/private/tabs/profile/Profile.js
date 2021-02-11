@@ -1,15 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, Button, ImageBackground } from 'react-native'
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { Text, View, Image, Button, ImageBackground, Touchable } from 'react-native'
+import { FlatList, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import styles from '../home/styles';
+import profileStyles from './profileStyles';
 import { REACT_APP_SERVER_URL } from '@env'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
+import { COLORS } from '../../../../constants/theme'
 
-export default function Profile({ navigation, setIsLoggedIn }) {
+export default function Profile({ navigation, setIsLoggedIn, addProperty, setProperties}) {
   const formState = {
     profilePic: '',
     fullName: '',
@@ -21,6 +22,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
   const [cameraRollPermission, setCameraRollPermission] = useState('denied')
   const [profilePicEd, setProfilePicEd] = useState(null)
   const [form, setForm] = useState(formState)
+  
   
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
             Authorization: `Bearer ${token}`,
           },
         })
+        console.log('response.data', data)
         setCurrentUser(data.data)
         setForm({
           ...form, 
@@ -42,7 +45,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
           fullName: data.data.fullName,
           email: data.data.email,
           password: data.data.password,
-          property: !data.data.property ? '' : data.data.property,
+          property: !data.data.property ? '' : `${data.data.property.estateType} in ${data.data.property.address}, ${data.data.property.city}`,
         })
       } catch (err) {
         alert('We\'re having trouble to retrieve your info')
@@ -50,7 +53,7 @@ export default function Profile({ navigation, setIsLoggedIn }) {
     }
 
     getProfileInfo()
-  }, [profilePicEd])
+  }, [profilePicEd, addProperty])
 
   useEffect(() => {
     Permissions.askAsync(Permissions.MEDIA_LIBRARY)
@@ -63,31 +66,32 @@ export default function Profile({ navigation, setIsLoggedIn }) {
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
-        allowsMultipleSelection: true,
       })
-  
       const imageData = new FormData()
       imageData.append('name', 'Image Upload');
       imageData.append('file_attachment', {
         ...data,
-        name: 'image.jpg'
+        name: `image_${Math.floor(Math.random() * 1000)}.jpg`
       })
-
       const token = await AsyncStorage.getItem('token')
+
+      console.log('REACT_APP_SERVER_URL', REACT_APP_SERVER_URL)
       const response = await axios({  
-        baseURL: REACT_APP_SERVER_URL,
-        method: 'PUT',
+        baseURL: REACT_APP_SERVER_URL, 
         url: '/upload/user',
+        method: 'PUT',
         data: imageData,
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         }
       })
+      
       setProfilePicEd(data)
       alert('Image successfully saved')
 
     } catch (err) {
+      console.log(err)
       alert('Try saving your image later')
     }
   }
@@ -101,105 +105,136 @@ export default function Profile({ navigation, setIsLoggedIn }) {
     setForm({ ...form, password: text })
   }
 
+  const postProperty = () => {
+    navigation.navigate('AddProperty')
+  }
+
   const onLogoutPress = async () => {
     await AsyncStorage.removeItem('token')
     setIsLoggedIn(false)
-  }
-
-  const addProperty = () => {
-    navigation.navigate('AddProperty')
+    setProperties([])
   }
   console.log('form', form)
   return (
-    <View style={styles.container}>
+    <View style={profileStyles.containerOuter}>
       <KeyboardAwareScrollView
         style={{ flex: 1, width: '100%' }}
       >
-        <View style={styles.container}>
-          <ImageBackground
-            style={styles.profilePic}
-            source={!!form.profilePic ? { uri: form.profilePic } : require('../../../../../assets/icon.png') }
+        <View style={profileStyles.containerInner}>
+          <View
+            style={{
+              borderRadius: 50,
+            }}
           >
+            <Image
+              style={profileStyles.profilePic}
+              source={!!form.profilePic ? { uri: form.profilePic } : require('../../../../assets/images/icon.png') }
+            />
           {cameraRollPermission === 'granted' && (
-            <TouchableOpacity
-              style={styles.addPicButton}
-              onPress={() => pickImage()}
+            <View
+              style={profileStyles.addPicView}
             >
-              <Image
-                source={require('../../../../../assets/add-icon.png')}
-                style={styles.addPicButtonIcon}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  zIndex: 50,
+                  elevation: 1000
+                }}
+                onPress={() => pickImage()}
+              >
+                <Image
+                  source={require('../../../../assets/images/photo-camera.png')}
+                  style={profileStyles.addPicButtonIcon}
+                />
+              </TouchableOpacity>
+            </View>
           )}
-          </ImageBackground>
+          </View>
         </View>
         <View>
           <Text
-            style={styles.textLabel}
+            style={profileStyles.textLabel}
           >Name</Text>
           <TextInput 
             onChangeText={nameHandleChange}
-            style={styles.input}
+            style={profileStyles.input}
             value={form.fullName}
           />
           <Text
-            style={styles.textLabel}
+            style={profileStyles.textLabel}
           >Email</Text>
           <TextInput 
             onChangeText={emailHandleChange}
-            style={styles.input}
+            style={profileStyles.input}
             value={form.email}
           />
           <Text
-            style={styles.textLabel}
-          >Password</Text>
-          <TextInput 
-            onChangeText={passwordHandleChange}
-            style={styles.input}
-            value={form.password}
-          />
-          <Text
-            style={styles.textLabel}
-          >Properties</Text>
+            style={profileStyles.textLabel}
+          >Property</Text>
           <View
             style={{
-              borderWidth: 1,
               flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center'
+              width: '100%',
+              alignItems: 'center',
+              paddingHorizontal: 30,
+              paddingTop: 10,
+              flexWrap: 'wrap'
             }}
           >
             <TextInput 
               editable={false}
-              style={styles.propertyInput}
+              style={{
+                width: !form.property ? '100%' : '100%',
+                backgroundColor: 'white',
+                borderTopLeftRadius: 5,
+                borderBottomLeftRadius: 5,
+                borderTopRightRadius: !form.property ? 0 : 5,
+                borderBottomRightRadius: !form.property ? 0 : 5,
+                height: 48,
+                paddingLeft: 16
+              }}
               value={!form.property ? 'You don\'t have properties' : form.property}
             />
             {!form.property ? (
-              <TouchableOpacity
-              onPress={addProperty}
-              style={{
-                backgroundColor: 'red',
-                alignItems: "center",
-                justifyContent: 'center',
-                flex: 1,
-                height: 48,
-
-              }}  
-            >
-              <Text
+              <View
                 style={{
-                  fontSize: 16,
-                  fontWeight: "bold",
-                  flex: 1,
+                  position: 'absolute',
+                  right: 35,
+                  top: 15
                 }}
-              >Add</Text>
-            </TouchableOpacity>
+              >
+                <Button 
+                  onPress={() => postProperty()}
+                  title="Add"
+                  color="#841584"
+                />
+              </View>
+
             ) : <></>}
-            
           </View>
         </View>
        
-
+        <TouchableOpacity
+          style={{
+            backgroundColor: COLORS.primary,
+            marginLeft: 30,
+            marginRight: 30,
+            marginTop: 20,
+            height: 48,
+            width: '85%',
+            borderRadius: 5,
+            alignItems: "center",
+            justifyContent: 'center'
+          }}
+          onPress={() => onLogoutPress()}
+        >
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 16,
+              fontWeight: "bold"
+            }}
+          >Logout</Text>
+        </TouchableOpacity>
       </KeyboardAwareScrollView>
     </View>
   )

@@ -4,8 +4,8 @@ export const COLORS = {
 }
 
 export const LOGO = {
-  width: 100,
-  height: 100,
+  width: 250,
+  height: 250,
   alignSelf: "center",
   marginBottom: 30
 }

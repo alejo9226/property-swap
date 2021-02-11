@@ -10,39 +10,14 @@ import ViewProperty from './ViewProperty'
 import GetProperties from './GetProperties'
 import PostSwap from './PostSwap'
 
+console.log('REACT_APP_SERVER_URL', REACT_APP_SERVER_URL)
+
 const Stack = createStackNavigator()
 
 export default function Home({ setIsLoggedIn }) {
 
   const [properties, setProperties] = useState([])
 
-  useEffect(() => {
-    async function getProperties () {
-      try {
-        const token = await AsyncStorage.getItem('token')
-        const { data } = await axios({
-          baseURL: REACT_APP_SERVER_URL,
-          method: 'GET',
-          url: `/property`,
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          }
-        })
-        console.log('propertiesirras', data.data)
-        setProperties([...data.data])
-      } catch (err) {
-        alert(`${err}`)
-      }
-    }
-    getProperties()
-  }, [])
-
-  const onLogoutPress = async () => {
-    await AsyncStorage.removeItem('token')
-    setIsLoggedIn(false)
-    setProperties([])
-  }
-  console.log('total properties', properties)
   return (
     <NavigationContainer
       independent={true}
@@ -53,7 +28,7 @@ export default function Home({ setIsLoggedIn }) {
         }}
       >
         <Stack.Screen name="GetProperties">
-          {props => <GetProperties {...props} setIsLoggedIn={setIsLoggedIn}/>}
+          {props => <GetProperties {...props} setIsLoggedIn={setIsLoggedIn} properties={properties} setProperties={setProperties} />}
         </Stack.Screen>
         <Stack.Screen name="ViewProperty">
           {props => <ViewProperty {...props} setIsLoggedIn={setIsLoggedIn}/>}

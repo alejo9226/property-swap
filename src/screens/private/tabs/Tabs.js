@@ -5,13 +5,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Home from './home/Home';
 import ProfileHome from './profile/ProfileHome';
 import { COLORS } from '../../../constants/theme'
-import RetrieveSwaps from './swaps/RetrieveSwaps';
+import SwapsHome from './swaps/SwapsHome';
 
 
 const Tab = createBottomTabNavigator()
 
 export default function Tabs ({ setIsLoggedIn }) {
   
+  const [properties, setProperties] = useState([])
   
   return (
     <Tab.Navigator 
@@ -27,7 +28,7 @@ export default function Tabs ({ setIsLoggedIn }) {
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('../../../../assets/home-black-shape.png')} 
+              source={require('../../../assets/images/home-black-shape.png')} 
               resizeMode="contain"
               style={{
                 width: 25,
@@ -45,7 +46,7 @@ export default function Tabs ({ setIsLoggedIn }) {
         options={{
           tabBarIcon: ({ focused }) => (
             <Image 
-            source={require('../../../../assets/user.png')} 
+            source={require('../../../assets/images/user.png')} 
             resizeMode="contain"
             style={{
               width: 25,
@@ -56,25 +57,25 @@ export default function Tabs ({ setIsLoggedIn }) {
           )
         }}
       >
-        {props => <ProfileHome {...props} setIsLoggedIn={setIsLoggedIn} />}
+        {props => <ProfileHome {...props} setIsLoggedIn={setIsLoggedIn} properties={properties} setProperties={setProperties} />}
       </Tab.Screen>
       <Tab.Screen 
         name="RetrieveSwaps"
         options={{
           tabBarIcon: ({ focused }) => (
             <Image 
-            source={require('../../../../assets/shuffle.png')} 
-            resizeMode="contain"
-            style={{
-              width: 25,
-              height: 25,
-              tintColor: focused ? COLORS.primary : "#CDCDD2"
-            }}
+              source={require('../../../assets/images/shuffle.png')} 
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: focused ? COLORS.primary : "#CDCDD2"
+              }}
             />
           )
         }}
       >
-        {props => <RetrieveSwaps {...props} setIsLoggedIn={setIsLoggedIn} />}
+        {props => <SwapsHome {...props} setIsLoggedIn={setIsLoggedIn} />}
       </Tab.Screen>
     </Tab.Navigator>
   )

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, Modal } from 'react-native'
+import { View, Text, TextInput, Modal, Image } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { REACT_APP_SERVER_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -7,6 +7,7 @@ import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handl
 import CalendarPicker from 'react-native-calendar-picker'
 import axios from 'axios'
 import { useEffect } from 'react'
+import { COLORS } from '../../../../constants/theme'
 
 
 export default function PostSwap ({ navigation, route }) {
@@ -44,7 +45,7 @@ export default function PostSwap ({ navigation, route }) {
       }
     }
     getProperties()
-  }, [])
+  }, [dates])
 
   
 
@@ -53,12 +54,11 @@ export default function PostSwap ({ navigation, route }) {
     if (
         !dates.START_DATE ||
         !dates.END_DATE || 
-        !conditions ||
-        !propertyToSwap
+        !conditions 
       ) throw new Error('You\'re missing info')
 
     const swap = {
-      firstProperty: propertyToSwap,
+      firstProperty: route.params.property,
       secondUser: user._id,
       secondProperty: _id,
       from: dates.START_DATE,
@@ -96,67 +96,168 @@ export default function PostSwap ({ navigation, route }) {
 
   console.log('route.params.property', route.params.property)
   console.log('chosen dates', dates)
+  console.log('propertytoswap', propertyToSwap)
   return (
     <View
       style={{
-        paddingTop: 40
+        flex: 1,
+        paddingTop: 40,
+        backgroundColor: COLORS.background,
+        paddingHorizontal: 15
       }}
     >
       <TouchableOpacity
         onPress={() => navigation.goBack()}
+        style={{
+          zIndex: 50,
+          elevation: 1000,
+          height: 30,
+          width: 30,
+          borderRadius: 50,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'white'
+        }}
       >
-        <Text>Return</Text>
-      </TouchableOpacity>
-      <Modal
-        visible={modalVisible}
-      >
-        <View
+        <Image 
+          source={require('../../../../assets/images/back.png')}
           style={{
-            margin: 20,
-            backgroundColor: "white",
-            borderRadius: 20,
-            padding: 35,
-            alignItems: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5
+            height: 15,
+            width: 15,
           }}
+        />
+      </TouchableOpacity>
+     
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+       
         >
           <View
             style={{
-
+              flex: 1,
+              backgroundColor: 'transparent',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
-            <Text>Swap sent!</Text>
-            <TouchableHighlight
-              onPress={() => setModalVisible(!modalVisible)}
+            <View
+              style={{
+                margin: 20,
+                width: '70%',
+                backgroundColor: COLORS.background,
+                borderRadius: 20,
+                padding: 35,
+                alignItems: "center",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2
+                },
+                shadowOpacity: 0.25,
+                alignItems: 'space-around',
+                justifyContent: 'center',
+                shadowRadius: 3.84,
+                elevation: 5
+              }}
             >
-              <Text>Understood</Text>
-            </TouchableHighlight>
-          </View>
+              <View
+                style={{
+                  width: '100%',
+                  justifyContent: 'center'
+                }}
+              >
+                <Text
+                  style={{
+                    alignSelf: 'center'
+                  }}
+                >Swap sent!</Text>
+                <TouchableHighlight
+                  onPress={() => setModalVisible(!modalVisible)}
+                  style={{
+                    backgroundColor: COLORS.primary,
+                    width: '90%',
+                    borderRadius:  5,
+                    marginTop: 15,
+                    alignSelf: 'center',
+                    height: 35,
+                    alignItems: "center",
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: 'white'
+                    }}
+                  >Understood</Text>
+                </TouchableHighlight>
+              </View>
 
-        </View>
-      </Modal>
-      <Text>Choose dates</Text>
-      <CalendarPicker 
-        allowRangeSelection={true}
-        onDateChange={onDateChange}
-      />
-      <Text>Conditions</Text>
+            </View>
+          </View>
+        </Modal>
+      <Text
+        style={{
+          fontSize: 20,
+          marginTop: 10,
+          fontWeight: '600'
+        }}
+      >Choose dates</Text>
+      <View
+        style={{
+          marginTop: 20
+        }}
+      >
+        <CalendarPicker 
+          allowRangeSelection={true}
+          onDateChange={onDateChange}
+          previousTitleStyle={{
+            color: COLORS.primary
+          }}
+          nextTitleStyle={{
+            color: COLORS.primary
+          }}
+          selectedRangeStyle={{
+            backgroundColor: 'white'
+          }}
+        />
+      </View>
+      <Text
+        style={{
+          fontSize: 20,
+          marginTop: 10,
+          fontWeight: '600'
+        }}
+      >Conditions</Text>
       <TextInput 
         value={conditions}
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 5,
+          height: 68,
+          marginTop: 10,
+          marginBottom: 10,
+          padding: 10
+        }}
         onChangeText={(text) => setConditions(text)}
       />
       {!!properties && properties.length > 0 && (
         <>
-        <Text>Choose property</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            marginTop: 10,
+            fontWeight: '600'
+          }}
+        >Choose property</Text>
         <Picker
-          onValueChange={(val, i) => setPropertyToSwap(val)}
+          selectedValue={propertyToSwap}
+          style={{
+            height: 50,
+            marginBottom: 100,
+            marginTop: 0
+          }}
+          onValueChange={(itemValue, itemIndex) => setPropertyToSwap(itemValue)}
         >
           {properties.map(property => {
             return (
@@ -172,9 +273,24 @@ export default function PostSwap ({ navigation, route }) {
         </>
       ) }
       <TouchableOpacity
-        onPress={postSwap}
+        onPress={() => postSwap()}
+        style={{
+          backgroundColor: COLORS.primary,
+          marginTop: 20,
+          height: 48,
+          width: '100%',
+          borderRadius: 5,
+          alignItems: "center",
+          justifyContent: 'center',
+        }}
       >
-        <Text>Propose</Text>
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 16,
+            fontWeight: "bold"
+          }}
+        >Propose</Text>
       </TouchableOpacity>
     </View>
   )

@@ -46,7 +46,7 @@ export default function RegistrationScreen({ navigation, setIsLoggedIn }) {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require('../../../../assets/icon.png')}
+        source={require('../../../assets/images/PropertySwapLogo.png')}
       />
       <TextInput
         style={styles.input}
