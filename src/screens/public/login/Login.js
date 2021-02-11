@@ -27,7 +27,6 @@ export default function LoginScreen({ navigation, setIsLoggedIn }) {
           url: `/user/login`,
           data: loggingUser,
         })
-        console.log('datica', data)
         await AsyncStorage.setItem('token', data.token)
         setIsLoggedIn(true)
       } catch (error) {

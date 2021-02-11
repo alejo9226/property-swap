@@ -20,7 +20,6 @@ export default function GetProperties ({ setIsLoggedIn, navigation, properties, 
             'Authorization': `Bearer ${token}`,
           }
         })
-        console.log('propertiesirras', data.data)
         setProperties([...data.data])
       } catch (err) {
         alert(`${err}`)
@@ -38,7 +37,6 @@ export default function GetProperties ({ setIsLoggedIn, navigation, properties, 
   const viewProperty = (id) => {
     navigation.navigate('ViewProperty', { id })
   }
-  console.log('total properties', properties)
   return (
     <SafeAreaView
       style={{

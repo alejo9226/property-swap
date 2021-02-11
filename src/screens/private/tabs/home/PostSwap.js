@@ -38,7 +38,6 @@ export default function PostSwap ({ navigation, route }) {
             'Authorization': `Bearer ${token}`,
           }
         })
-        console.log('propiedades', data.data)
         setProperties(data.data)
       } catch (err) {
         alert(err.message)
@@ -65,7 +64,6 @@ export default function PostSwap ({ navigation, route }) {
       to: dates.END_DATE,
       conditions,
     }
-    console.log('swap', swap)
 
     try {
       token = await AsyncStorage.getItem('token')
@@ -78,15 +76,12 @@ export default function PostSwap ({ navigation, route }) {
           'Authorization': `Bearer ${token}`,
         }
       })
-      console.log('data', data.data)
       setModalVisible(true)
     } catch (err) {
       alert(err.message)
     }
   }
   const onDateChange = (date, type) => {
-    console.log('date', date)
-    console.log('type', type)
     setDates({
       ...dates, [type]: date
     })
@@ -94,9 +89,6 @@ export default function PostSwap ({ navigation, route }) {
 
   
 
-  console.log('route.params.property', route.params.property)
-  console.log('chosen dates', dates)
-  console.log('propertytoswap', propertyToSwap)
   return (
     <View
       style={{

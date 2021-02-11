@@ -33,7 +33,6 @@ export default function IncomingSwaps () {
             Authorization: `Bearer ${token}`
           }
         })
-        console.log('data.data', data.data)
         setIncomingSwaps(data.data)
       } catch (err) {
         alert(err.message)
@@ -44,7 +43,6 @@ export default function IncomingSwaps () {
 
   async function registerForPushNotificationsAsync() {
     const notifToken = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log('notifToken', notifToken)
   }
 
   const viewSwap = (swap) => {
@@ -64,17 +62,14 @@ export default function IncomingSwaps () {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log('data.data', data.data)
       alert(`Swap ${state}`)
       setModalVisible(false)
     } catch (err) {
       alert(err.message)
     }
-    console.log('accepting swap..')
   }
 
   const formatShortDate = (date) => {
-    console.log('date', date)
     const newDate = new Date(date);
     const options = {
       year: "numeric",
@@ -82,12 +77,9 @@ export default function IncomingSwaps () {
       day: "numeric",
     };
     const formatDate = newDate.toLocaleDateString("en-AU", options);
-    console.log('formatDate', formatDate)
     return formatDate;
   };
 
-  console.log('incomingswaps', incomingSwaps)
-  console.log('notificationPermission', notificationPermission)
   return (
     <SafeAreaView
       style={{

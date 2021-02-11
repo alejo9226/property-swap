@@ -10,7 +10,6 @@ import ViewProperty from './ViewProperty'
 import GetProperties from './GetProperties'
 import PostSwap from './PostSwap'
 
-console.log('REACT_APP_SERVER_URL', REACT_APP_SERVER_URL)
 
 const Stack = createStackNavigator()
 

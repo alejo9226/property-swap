@@ -37,7 +37,6 @@ export default function Profile({ navigation, setIsLoggedIn, addProperty, setPro
             Authorization: `Bearer ${token}`,
           },
         })
-        console.log('response.data', data)
         setCurrentUser(data.data)
         setForm({
           ...form, 
@@ -75,7 +74,6 @@ export default function Profile({ navigation, setIsLoggedIn, addProperty, setPro
       })
       const token = await AsyncStorage.getItem('token')
 
-      console.log('REACT_APP_SERVER_URL', REACT_APP_SERVER_URL)
       const response = await axios({  
         baseURL: REACT_APP_SERVER_URL, 
         url: '/upload/user',
@@ -91,7 +89,6 @@ export default function Profile({ navigation, setIsLoggedIn, addProperty, setPro
       alert('Image successfully saved')
 
     } catch (err) {
-      console.log(err)
       alert('Try saving your image later')
     }
   }
@@ -114,7 +111,6 @@ export default function Profile({ navigation, setIsLoggedIn, addProperty, setPro
     setIsLoggedIn(false)
     setProperties([])
   }
-  console.log('form', form)
   return (
     <View style={profileStyles.containerOuter}>
       <KeyboardAwareScrollView

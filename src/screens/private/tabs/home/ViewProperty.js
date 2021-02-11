@@ -23,7 +23,6 @@ export default function ViewProperty ({ navigation, route }) {
             'Authorization': `Bearer ${token}`
           }
         })
-        console.log('propertyuseff', data.data)
         setProperty(data.data)
 
       } catch (err) {
@@ -37,7 +36,6 @@ export default function ViewProperty ({ navigation, route }) {
     navigation.navigate('PostSwap', { property })
   }
 
-  console.log('property', property)
   return (
     <View
       style={{
